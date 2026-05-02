@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info:
+  title: EduGuard & Ledger System
+  description: Système de gestion des notes et détection de faux billets.
+  version: v1
+servers:
+  - url: http://localhost:5000/v1
+
+paths:
+  /scan:
+    post:
+      summary: Analyse de billet via CurrencyVerifier Pro
+      tags:
+        - Detection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [protocol]
+              properties:
+                protocol:
+                  type: string
+                  enum: [UV, MAGNETIC, INFRARED]
+      responses:
+        '200':
+          description: Analyse réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  ui_config:
+                    type: object
+                    properties:
+                      color: { type: string }
+                      sound_file: { type: string }
+                      layout_style: { type: string }
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
